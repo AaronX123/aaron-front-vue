@@ -64,7 +64,7 @@ service.interceptors.response.use(
       // 50008：非法令牌; 50012：其他客户登录; 50014：令牌已过期;
       if (res.code === code.TOKEN_ILLEGAL || res.code === code.OTHER_LOGIN || res.code === code.TOKEN_TIMEOUT) {
         // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
+        MessageBox.confirm('你已经掉线了，请重新登录', 'Confirm logout', {
           confirmButtonText: 'Re-Login',
           cancelButtonText: 'Cancel',
           type: 'warning'
@@ -77,6 +77,7 @@ service.interceptors.response.use(
       Message({
         message: res.code + ':' + res.msg || 'Error',
         type: 'error',
+        // 显示持续时间5秒
         duration: 5 * 1000
       })
       return Promise.reject(new Error(res.msg || 'Error'))
@@ -87,7 +88,7 @@ service.interceptors.response.use(
           type: 'success'
         })
       }
-      return response.data.body.data
+      return response.data.data
     }
   },
 

@@ -22,33 +22,20 @@ import { getCookies, setCookies, getToken } from '@/utils/auth'
 export function commonRequestUtil(params) {
   const head = JSON.parse(getCookies('head') || null)
   return {
-    head: {
-      version: head.version,
-      businessType: head.businessType,
-      deviceId: head.deviceId,
-      deviceType: head.deviceType,
-      crypt: head.crypt,
-      token: getToken()
-    },
-    body: params
+    version: head.version,
+    token: getToken(),
+    data: params
   }
 }
 
 /**
  * 保存公用数据至cookie
  * @param version
- * @param businessType
- * @param deviceId
- * @param deviceType
- * @param crypt
+ * @param token
  */
-export function saveHead(version, businessType, deviceId, deviceType, crypt) {
+export function saveHead(version) {
   const head = {
-    version: version,
-    businessType: businessType,
-    deviceId: deviceId,
-    deviceType: deviceType,
-    crypt: crypt
+    version: version
   }
   setCookies('head', JSON.stringify(head))
 }

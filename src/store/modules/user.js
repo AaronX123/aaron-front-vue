@@ -1,7 +1,7 @@
 import { login, logout, getInfo, getMenu } from '@/api/user'
 import { getToken, setToken, removeToken, clearAllCookie } from '@/utils/auth'
 import { saveHead } from '@/utils/requestUtils'
-import { getMenuTree, converter, getOptionPremission } from '@/utils/getMenuTree'
+import { getMenuTree, converter, getOptionPermission } from '@/utils/getMenuTree'
 import router, { resetRouter, errorRouter } from '@/router'
 // import Layout from '@/layout'
 
@@ -53,7 +53,7 @@ const actions = {
           const data = res
           commit('SET_TOKEN', data.token)
           setToken(data.token)
-          saveHead('1', 'businessType', 'deviceId', 0, true)
+          saveHead('1')
           resolve()
         })
         .catch(error => {
@@ -67,7 +67,7 @@ const actions = {
       getInfo().then(res => {
         const data = res
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('验证失败，请重新登录')
         }
         const { id, name, profilePicture, companyId } = data
         commit('SET_ID', id)
@@ -86,10 +86,10 @@ const actions = {
       getMenu().then(res => {
         const menu = res
         if (!menu) {
-          reject('Verification failed, please Login again.')
+          reject('验证失败，请重新登录')
         }
-        const perms = getOptionPremission(menu)
-        commit('SET_PREMS', perms)
+        const perms = getOptionPermission(menu)
+        commit('SET_PERMS', perms)
         const newMenu = converter(menu)
         const MenuTree = getMenuTree(newMenu)
         MenuTree.push(errorRouter)

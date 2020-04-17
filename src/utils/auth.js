@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'boss_bes_token'
+const TokenKey = 'aaron_token'
 
 // const MenuTreeKey = 'boss_bes_menu'
 

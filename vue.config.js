@@ -19,8 +19,8 @@ const name = defaultSettings.title || 'vue Admin Template'
 // 例如，Mac：sudo npm run
 // 您可以通过以下方法更改端口：
 // port = 9528 npm run dev OR npm run dev --port = 9528
-const port = process.env.port || process.env.npm_config_port || 9528
-
+//
+const port = 9528;
 // 所有配置项说明都可以在https://cli.vuejs.org/config/ 中找到
 module.exports = {
   /**
@@ -57,7 +57,8 @@ module.exports = {
       [process.env.VUE_APP_BASE_API]: {
         // 设置IP和端口的代理
         // target: 'http://106.14.113.130:8766',
-        target: 'http://139.196.162.227:8766',
+        //target: 'http://139.196.162.227:8766',
+        target: 'localhost:8766',
         // 跨域
         changeOrigin: true,
         // 路径重写

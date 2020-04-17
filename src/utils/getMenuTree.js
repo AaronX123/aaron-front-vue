@@ -25,7 +25,7 @@ export function getMenuTree(source) {
   return tmp['null'].children
 }
 
-export function getOptionPremission(source) {
+export function getOptionPermission(source) {
   const tmp = []
   for (const n in source) {
     let item = null
