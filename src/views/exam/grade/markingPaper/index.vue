@@ -9,7 +9,7 @@
             <el-card>
               <h3>{{ currentPaperVO.name }}</h3>
               <div
-                v-for="(subject,index) in currentPaperVO.currentPaperSubjectDTOList"
+                v-for="(subject,index) in currentPaperVO.currentPaperSubjectVOList"
                 :key="index"
               >
                 <div>
@@ -111,6 +111,8 @@
 
 <script>
 import { save, getPaper, getPaperAnswer } from '@/api/exam/grade.js'
+import { Message } from 'element-ui'
+
 export default {
   name: 'Position',
   data() {
@@ -173,13 +175,20 @@ export default {
   methods: {
     // todo
     check(markScore, score) {
-      return "hhhh"
+      if (markScore > score) {
+        Message({
+          message: '超过分值',
+          type: 'error',
+          duration: 3 * 1000
+        })
+      }
     },
     // 获取答卷详情
     getThePaper() {
+      console.log("------info--------")
       getPaper(this.paperId).then(res => {
         this.currentPaperVO = res
-        this.currentPaperVO.currentPaperSubjectDTOList.forEach((item, index) => {
+        this.currentPaperVO.currentPaperSubjectVOList.forEach((item, index) => {
           const params = JSON.parse(JSON.stringify(this.markingAnswerVO))
           if (item.objectiveSubject === true) {
             if (this.myAnswerVO[index].myAnswer === this.myAnswerVO[index].standardAnswer) {
@@ -204,14 +213,17 @@ export default {
     },
     // 提交试卷批改 所有题和总分评语
     submitMarkingPaper() {
-      console.log(this.markingPaperVO)
       this.$refs[ 'markingPaperVO' ].validate((valid) => {
         if (valid) {
           save(this.markingPaperVO)
           this.clear()
           this.$router.push('grade')
         } else {
-          alert('信息填写不完整')
+          Message({
+            message: '信息填写不完整',
+            type: 'error',
+            duration: 3 * 1000
+          })
           return false
         }
       })

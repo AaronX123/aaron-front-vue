@@ -152,9 +152,7 @@
             clearable
             disabled
             size="mini"
-            placeholder="请选择父亲节点"
             :show-all-levels="false"
-            :props="{ checkStrictly: true }"
             style="width: 200px"
           />
         </el-form-item>
@@ -215,12 +213,11 @@ export default {
       FormRules: {
         name: [{ required: true, message: '请输入节点名称', trigger: 'blur' }],
         code: [{ required: true, message: '请输入编号', trigger: 'blur' }],
-        parentId: [{ required: true, message: '请输入父亲节点', trigger: 'blur' }],
         url: [{ required: true, message: '请输入URL', trigger: 'blur' }],
         resourceType: [{ required: true, message: '请输入资源类型', trigger: 'blur' }],
         orderIndex: [{ required: true, message: '请输入顺序号', trigger: 'blur' }],
-        closeImg: [{ required: true, message: '请输入关闭图标', trigger: 'blur' }],
-        openImg: [{ required: true, message: '请输入打开图标', trigger: 'blur' }],
+        // closeImg: [{ required: true, message: '请输入关闭图标', trigger: 'blur' }],
+        // openImg: [{ required: true, message: '请输入打开图标', trigger: 'blur' }],
         leaf: [{ required: true, message: '请选择是否为叶子节点', trigger: 'blur' }]
       },
       saveForm: {

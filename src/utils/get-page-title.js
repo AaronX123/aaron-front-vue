@@ -1,6 +1,6 @@
 import defaultSettings from '@/settings'
 
-const title = defaultSettings.title || '博思考试系统'
+const title = defaultSettings.title || '在线考试系统后台'
 
 /**
  * 这里是获取页面标题

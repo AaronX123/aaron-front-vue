@@ -51,6 +51,14 @@ export const constantRoutes = [
   },
 
   {
+    path: '/user/role/userAllocation',
+    name: '用户分配',
+    hidden: true,
+    component: () => import('@/views/user/role/userAllocation'),
+    meta: { title: '用户分配' }
+  },
+
+  {
     path: '/',
     component: Layout,
     redirect: '/welcome',
@@ -62,7 +70,7 @@ export const constantRoutes = [
         meta: { title: '首页', icon: 'example', affix: true }
       }
     ]
-  }
+  },
 
   // /**
   //  * 基础数据管理
@@ -159,13 +167,7 @@ export const constantRoutes = [
   //       component: () => import('@/views/user/role/index'),
   //       meta: { title: '角色管理' }
   //     },
-  //     {
-  //       path: 'AllocationUser',
-  //       name: 'AllocationUser',
-  //       hidden: true,
-  //       component: () => import('@/views/user/role/AllocationUser'),
-  //       meta: { title: '用户分配' }
-  //     },
+
   //     {
   //       path: 'position',
   //       name: 'Position',
@@ -195,45 +197,20 @@ export const constantRoutes = [
   // /**
   //  * 考卷管理
   //  */
-  // {
-  //   path: '/paper',
-  //   component: Layout,
-  //   redirect: '/paper/composition',
-  //   name: 'Paper',
-  //   meta: { title: '考卷管理', icon: 'form' },
-  //   children: [
-  //     {
-  //       path: 'composition',
-  //       name: 'Composition',
-  //       component: () => import('@/views/paper/composition/index'),
-  //       meta: { title: '组卷' }
-  //     },
-  //     {
-  //       path: 'upload',
-  //       name: 'Upload',
-  //       component: () => import('@/views/paper/upload/index'),
-  //       meta: { title: '上传试卷' }
-  //     },
-  //     {
-  //       path: 'download',
-  //       name: 'Download',
-  //       component: () => import('@/views/paper/download/index'),
-  //       meta: { title: '下载试卷' }
-  //     },
-  //     {
-  //       path: 'maintenance',
-  //       name: 'Maintenance',
-  //       component: () => import('@/views/paper/maintenance/index'),
-  //       meta: { title: '维护试卷' }
-  //     },
-  //     {
-  //       path: 'template',
-  //       name: 'Template',
-  //       component: () => import('@/views/paper/template/index'),
-  //       meta: { title: '试卷模板管理' }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/paper/composition/normalGen',
+    name: '标准组卷',
+    hidden: true,
+    component: () => import('@/views/paper/composition/normalGen'),
+    meta: { title: '标准组卷' }
+  },
+  {
+    path: '/paper/composition/fastGen',
+    name: '修改快速组卷',
+    hidden: true,
+    component: () => import('@/views/paper/composition/fastGen'),
+    meta: { title: '修改快速组卷' }
+  },
   // /**
   //  * 考试管理
   //  */

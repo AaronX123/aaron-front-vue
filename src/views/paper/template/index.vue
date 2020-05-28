@@ -162,14 +162,13 @@ import { queryCategory } from '../../../api/basedata/category'
 import { querySubjectType } from '../../../api/basedata/subjectType'
 import { getQueryList } from '../../../utils/treeList'
 import PaperInfo from '@/components/paperInfo/index'
+import { Message } from 'element-ui'
+
 export default {
   name: 'Position',
   components: { PaperInfo },
   data() {
     return {
-      paperTypeDataSearch: {
-        name: '试卷类型'
-      },
       // 查询对象
       templateQueryName: '',
       // 日期选项
@@ -319,7 +318,11 @@ export default {
           console.log(this.selected)
           if (e === 1) {
               if (this.selected.length < 1) {
-                  alert('请选择一项进行删除')
+                Message({
+                  message: '请选择一项进行删除',
+                  type: 'error',
+                  duration: 3 * 1000
+                })
               } else {
                   this.$confirm('确认删除吗？', '提示', {}).then(() => {
                       this.loading = true
@@ -359,7 +362,11 @@ export default {
     handleModify(e) {
         if (e === 1) {
             if (this.selected.length !== 1) {
-                alert('必须且仅只能选择一条')
+              Message({
+                message: '必须且仅只能选择一条',
+                type: 'error',
+                duration: 3 * 1000
+              })
             } else {
                 this.showNav = false
                 this.show = false
@@ -394,7 +401,11 @@ export default {
     handleInfo(e) {
         if (e === 1) {
             if (this.selected.length !== 1) {
-                alert('必须且仅只能选择一条')
+              Message({
+                message: '必须且仅只能选择一条',
+                type: 'error',
+                duration: 3 * 1000
+              })
             } else {
                 this.paperInfoLoading = true
                 paperDetail(this.selected[0].id).then(res => {

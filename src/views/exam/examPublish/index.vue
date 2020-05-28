@@ -108,6 +108,7 @@
                 @click="deleteSingle(scope.$index,tableData)"
               />
               <el-button
+                :disabled="new Date().getTime()<tableData[scope.$index].createdTime"
                 type="warning"
                 icon="el-icon-share"
                 size="mini"
@@ -332,7 +333,7 @@
             closable
             @close="closeExaminersTag(tag)"
           >{{ tag }}</el-tag>
-          <el-button type="primary" @click="queryExaminers();examinerInnerVisible = true">添加阅卷官</el-button>
+          <el-button type="primary" @click="queryExaminers(); examinerInnerVisible = true">添加阅卷官</el-button>
         </el-form-item>
         <el-form-item label="阅卷方式" prop="markingMode">
           <el-select v-model="publishForm.markingMode" placeholder="请选择阅卷方式">
@@ -403,7 +404,7 @@
           <el-form-item label="阅卷官">
             <el-input v-model="examinersDialogQueryForm.examiner" placeholder="阅卷官" />
           </el-form-item>
-          <el-button type="primary" icon="el-icon-search" @click="queryExaminers">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="queryExaminers()">查询</el-button>
         </el-form>
         <el-table
           v-loading="loading"
@@ -437,6 +438,8 @@
 import VueQr from 'vue-qr'
 import { query, save, del, update, getPaperInfo, getUserInfo } from '@/api/exam/examPublishRecord.js'
 import Pagination from '@/components/Pagination/index'
+import { Message } from 'element-ui'
+
 export default {
   components: { VueQr, Pagination },
   data() {
@@ -580,7 +583,11 @@ export default {
             this.getExamPublishRecord()
           })
         } else {
-          alert('信息填写不完整')
+          Message({
+            message: '信息填写不完整',
+            type: 'error',
+            duration: 3 * 1000
+          })
           return false
         }
       })
@@ -593,12 +600,16 @@ export default {
         this.clearForm
         this.editDialogFormVisible = true
         const item = tableData[index]
+
         this.publishForm.id = item.id
+        this.publishForm.paperId = item.paperId
         this.publishForm.title = item.title
         this.publishForm.examSession = item.examSession
         this.publishForm.planPepoleNum = item.planPepoleNum
         this.publishForm.limitTime = item.limitTime
         this.publishForm.descript = item.descript
+        console.log(this.publishForm)
+        console.log(item)
       }
     },
     showSelectedEditPublishFormDialog() {
@@ -716,10 +727,48 @@ export default {
       }
     },
     showQrCode(index, tableData) {
-      this.qrCodeDialogVisible = true
-      this.url = 'http://www.shiyuntian.xyz/#/' + '?examPublishRecordId=' + tableData[index].id + '&paperId=' + tableData[index].paperId
-      console.log(this.url)
+      console.log(tableData[index].createdTime)
+      // 如果已经开始则不予开放二维码
+      if (new Date(this.changeTime(tableData[index].endTime)).getTime() < new Date().getTime()) {
+        this.$message({
+          type: 'info',
+          message: '考试已经结束，不再生成二维码'
+        })
+      }else {
+        this.qrCodeDialogVisible = true
+        // 此处配置手机端web路径
+        this.url = 'http://localhost:8888/#/' + '?examPublishRecordId=' + tableData[index].id + '&paperId=' + tableData[index].paperId
+        console.log(this.url)
+      }
     },
+
+    changeTime(option){
+      // currentTime当前时间，假设是 2019-7-2 19:03
+      var currentTime = option;
+      var reg = new RegExp("年","g");//去掉时间里面的-
+      var a = currentTime.replace(reg,"-");
+      var regs = new RegExp("月","g");//去掉时间里面的空格
+      var b = a.replace(regs,"-");
+      var regss = new RegExp("日","g");//去掉时间里面的:冒号
+      var c = b.replace(regss,"");
+      return c;
+    },
+
+    dateFormat(time) {
+      var date=new Date(time);
+      var year=date.getFullYear();
+      /* 在日期格式中，月份是从0开始的，因此要加0
+       * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+       * */
+      var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+      var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+      var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+      var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+      var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+      // 拼接
+      return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
+    },
+
     clearForm() {
       const startTime = new Date()
       const endTime = new Date(startTime.getFullYear(), startTime.getMonth(), startTime.getDate() + 1, 12, 0, 0)

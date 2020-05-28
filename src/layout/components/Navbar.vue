@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
+      this.$store.dispatch('app/toggleSideBar');
       if (this.$store.state.settings.showUserInfo) {
         this.$store.dispatch('settings/changeSetting', {
           key: 'showUserInfoCache',
@@ -50,7 +50,8 @@ export default {
       }
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
+      await this.$store.dispatch('user/logout');
+      this.$store.state.user.name = '';
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }

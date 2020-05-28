@@ -30,6 +30,7 @@ module.exports = {
    * 在大多数情况下，请使用 '/' !!!
    * 详情: https://cli.vuejs.org/config/#publicpath
    */
+
   publicPath: '/',
   // 打包输出目录
   outputDir: 'dist',
@@ -58,7 +59,7 @@ module.exports = {
         // 设置IP和端口的代理
         // target: 'http://106.14.113.130:8766',
         //target: 'http://139.196.162.227:8766',
-        target: 'localhost:8766',
+        target: 'http://localhost:8766',
         // 跨域
         changeOrigin: true,
         // 路径重写
@@ -66,6 +67,17 @@ module.exports = {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
       }
+      // '/gateway': {
+      //   // 设置IP和端口的代理
+      //   // target: 'http://106.14.113.130:8766',
+      //   //target: 'http://139.196.162.227:8766',
+      //   target: '192.168.1.101:8766',
+      //   // 跨域
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '/gateway': ''
+      //   }
+      // }
     }
   },
   configureWebpack: {

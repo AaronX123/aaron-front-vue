@@ -50,7 +50,7 @@ service.interceptors.response.use(
    * 您还可以通过HTTP状态代码判断状态
    */
   response => {
-    const res = response.data.head
+    const res = response.data;
     // 如果自定义代码不是200，则判断为错误。
     if (res.code !== code.SUCCESS && res.code !== code.NEWSUCCESS) {
       // 30098用户被强制下线
@@ -79,15 +79,15 @@ service.interceptors.response.use(
         type: 'error',
         // 显示持续时间5秒
         duration: 5 * 1000
-      })
+      });
       return Promise.reject(new Error(res.msg || 'Error'))
     } else {
-      if (res.msg !== '页面加载成功' && res.msg !== 'success') {
-        Message({
-          message: res.msg,
-          type: 'success'
-        })
-      }
+      // if (res.msg !== '页面加载成功' && res.msg !== 'success') {
+      //   Message({
+      //     message: res.msg,
+      //     type: 'success'
+      //   })
+      // }
       return response.data.data
     }
   },
@@ -96,8 +96,9 @@ service.interceptors.response.use(
    * 请求发生错误时响应的方法
    */
   error => {
-    const res = error.response.data
-    if (res.message === '您的账号在别地登录' || res.message === '您已被强制下线') {
+    const res = error.response.data;
+    console.log(res);
+    if (res.msg === '您的账号在别地登录' || res.msg === '您已被强制下线') {
       Message({
         message: res.message,
         type: 'error',
@@ -113,12 +114,40 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
-    } else {
+    } else if (res.message === '050003'){
       Message({
-        message: res.message,
+        message: '无访问权限',
+        duration: 5 * 1000
+      })
+    } else if (res.message === '050001'){
+      Message({
+        message: 'Token已过期，请重新登录',
+        duration: 5 * 1000
+      })
+      clearAllCookie()
+      router.push({
+        name: 'Welcome'
+      })
+    } else if(res.status === 500) {
+      Message({
+        message: '服务器连接失败，请稍后重试',
         type: 'error',
         duration: 5 * 1000
       })
+    } else {
+      if (res.msg === '' || res.code === ''){
+        Message({
+          message: "未知异常",
+          type: 'error',
+          duration: 5 * 1000
+        })
+      } else {
+        Message({
+          message: res.msg+" 跟踪码为："+res.code,
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
     }
     console.log('err' + error) // 打印错误日志
     return Promise.reject(error)

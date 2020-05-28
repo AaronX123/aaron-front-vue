@@ -119,3 +119,19 @@ export function isOneToNinetyNine(rule, value, callback) {
     }
   }, 0)
 }
+
+
+import { existCode } from '@/api/user/user'
+export function validateCode(rule, value, callback){
+  if (!value) {
+    return callback(new Error('输入不可以为空'))
+  }
+  existCode(value).then(res =>{
+    console.log(res)
+    if (res === false){
+      callback(new Error('已存在的工号'))
+    }else {
+      callback()
+    }
+  })
+}

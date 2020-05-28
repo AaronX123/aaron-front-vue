@@ -318,7 +318,8 @@ import { queryOptions, allocation, queryRoleOfUser } from '@/api/user/user'
 import { getTreeList } from '@/utils/treeList'
 import { getRoleOptions, getPositionOptions, getDeptOptions, getParentOptions } from '@/utils/getOptions'
 import { getDynamicOption } from '@/utils/dynamicLoading'
-import { isPassword, validatePhoneTwo, validateEMail } from '@/utils/validate'
+import { isPassword, validatePhoneTwo, validateEMail, validateCode } from '@/utils/validate'
+import { queryDepartment } from '@/api/user/department.js'
 import tree from '@/components/Tree/index'
 import PermsButton from '@/components/PermsButton/index'
 import Pagination from '@/components/Pagination/index'
@@ -366,13 +367,14 @@ export default {
       },
       FormRules: {
         name: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        code: [{ required: true, message: '请输入用户工号', trigger: 'blur' }],
+        code: [{ required: true, message: '请输入用户工号', trigger: 'blur' }, { validator: validateCode, trigger: 'blur' }],
         password: [{ required: true, message: '请输入初始密码', trigger: 'blur' }, { validator: isPassword, trigger: 'blur' }],
         sex: [{ required: true, message: '请输入性别', trigger: 'blur' }],
         birthday: [{ required: true, message: '请输入生日', trigger: 'blur' }],
         tel: [{ required: true, message: '请输入电话', trigger: 'blur' }, { validator: validatePhoneTwo, trigger: 'blur' }],
         email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }, { validator: validateEMail, trigger: 'blur' }],
-        status: [{ required: true, message: '请输入字典名', trigger: 'blur' }]
+        status: [{ required: true, message: '请输入字典名', trigger: 'blur' }],
+        roleId: [{ required: true, message: '请选择角色', trigger: 'blur' }]
       },
       saveForm: {
         id: '',
@@ -442,7 +444,11 @@ export default {
         this.companyOptions = getParentOptions(res)
         this.departmentOptions = getDeptOptions(res)
         this.departmentOption = getDeptOptions(res)
-      })
+      });
+      queryDepartment().then(res => {
+        this.departmentOptions = getDeptOptions(res)
+        this.departmentOption = getDeptOptions(res)
+      });
       queryOptions(this.type).then(res => {
         this.roleOptions = getRoleOptions(res.role)
         this.roleOption = getRoleOptions(res.role)
@@ -471,11 +477,24 @@ export default {
       })
     },
     saveUser() {
+      queryDepartment().then(res => {
+        console.log(res);
+        this.departmentOptions = getDeptOptions(res)
+        this.departmentOption = getDeptOptions(res)
+      });
+      queryOptions(this.type).then(res => {
+        this.roleOptions = getRoleOptions(res.role);
+        this.roleOption = getRoleOptions(res.role);
+        this.positionOptions = getPositionOptions(res.position);
+        this.positionOption = getPositionOptions(res.position)
+      });
       this.saveDialogVisible = true
       this.saveForm.companyId = this.$store.state.user.companyId
     },
     saveUserData(formName) {
+      console.log("------------------"+ formName)
       this.$refs[formName].validate((valid) => {
+        console.log("------------------"+ valid)
         if (valid) {
           this.loading = true
           save(this.type, this.saveForm).then(res => {

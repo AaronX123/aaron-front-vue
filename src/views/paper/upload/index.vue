@@ -120,6 +120,7 @@
 import { queryPaperWithCondition } from '../../../api/paper/maintain'
 import { queryDictionary } from '../../../api/basedata/dictionary'
 import { uploadPaper } from '../../../api/paper/template'
+import { Message } from 'element-ui'
 
 export default {
   name: 'Position',
@@ -228,7 +229,12 @@ export default {
     handleUploadClick(e) {
       if (e === 1) {
           if (this.selected.length !== 1) {
-              alert('请选择一项进行上传')
+            Message({
+              message: '请选择一项进行上传',
+              type: 'error',
+              duration: 3 * 1000
+            })
+            return
           }else {
               this.showUpdate = true
               //临时存下当前选中的数据
@@ -242,11 +248,19 @@ export default {
     },
     uploadPaper(e){
       if (this.modifiedPaper.name===''){
-          alert("模板名不能为空")
-          return
+        Message({
+          message: '模板名不能为空',
+          type: 'error',
+          duration: 3 * 1000
+        })
+        return
       } else if (this.modifiedPaper.paperType===''){
-          alert("试卷类型不能为空")
-          return
+        Message({
+          message: '试卷类型不能为空',
+          type: 'error',
+          duration: 3 * 1000
+        })
+        return
       }
       this.showUpdating = true
       //e是一个PaperVO,设置更新的数据

@@ -1,4 +1,4 @@
-import { commonRequestUtil, authRequestApi } from '@/utils/requestUtils'
+import { commonRequestUtil, authRequestApi, userRequestApi } from '@/utils/requestUtils'
 
 export function login(data) {
   console.log(data)

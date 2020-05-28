@@ -240,6 +240,7 @@ import { queryPaper } from '@/api/paper/template.js'
 import { fastGen, templateGen } from '@/api/paper/generatePaper'
 import { queryDictionary } from '@/api/basedata/dictionary'
 import { querySubjectType } from '@/api/basedata/subjectType'
+import { Message } from 'element-ui'
 export default {
   name: 'Position',
   components: { loading, PaperInfo },
@@ -531,8 +532,12 @@ export default {
 
     selectCreateTemplateGen(row) {
       if (this.selected.length !== 1){
-          alert("请选择一项进行模板组卷")
-          return
+        Message({
+          message: '请选择一项进行模板组卷',
+          type: 'error',
+          duration: 3 * 1000
+        })
+        return
       }
       queryDictionary(this.paperTypeDataSearch).then(res => {
         for (let i = 0; i < res.length; i++) {
@@ -547,11 +552,19 @@ export default {
     },
     createFastGen() {
         if (this.selectedCombExamConfigVO.name === ''){
-            alert("请输入试卷名")
-            return
+          Message({
+            message: '请输入试卷名',
+            type: 'error',
+            duration: 3 * 1000
+          })
+          return
         } else if (this.selectedCombExamConfigVO.paperType === ''){
-            alert("请选择试卷类型")
-            return
+          Message({
+            message: '请选择试卷类型',
+            type: 'error',
+            duration: 3 * 1000
+          })
+          return
         }
       this.genDialog = true
       this.paperTypeDialog = false
@@ -564,11 +577,19 @@ export default {
     },
     createTemplateGen(e) {
       if(this.templateInfo.name === ''){
-          alert("请输入试卷名称")
-          return
+        Message({
+          message: '请输入试卷名称',
+          type: 'error',
+          duration: 3 * 1000
+        })
+        return
       }else if (this.templateInfo.type === ''){
-          alert("请选择试卷类型")
-          return
+        Message({
+          message: '请选择试卷类型',
+          type: 'error',
+          duration: 3 * 1000
+        })
+        return
       }
       this.genDialog = true
       e.name = this.templateInfo.name
@@ -633,7 +654,11 @@ export default {
     showPaperInfo(e) {
       if (e === 1) {
         if (this.selected === '' || this.selected === null || this.selected.length !== 1) {
-          alert('必须且仅选择一份试卷')
+          Message({
+            message: '必须且仅选择一份试卷',
+            type: 'error',
+            duration: 3 * 1000
+          })
         } else {
           this.showInfoLoading = true
           paperDetail(this.selected[0].id).then(res => {

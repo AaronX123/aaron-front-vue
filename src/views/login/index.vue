@@ -78,6 +78,7 @@
         </el-form-item>
       </el-form>
       <slide-verify
+        ref="slideblock"
         v-show="showSlide"
         class="slide"
         :l="42"
@@ -209,6 +210,7 @@ export default {
     },
       // 验证条，成功后回调onSuccess,失败回调onFail
     login() {
+      this.$store.state.user.name = '';
       this.$refs.loginForm.validate(valid => {
         this.showSlide = true
         this.showLogin = false
@@ -216,19 +218,23 @@ export default {
     },
     onSuccess() {
       this.handleLogin()
+      this.$refs.slideblock.reset();
     },
     onFail() {
       this.$message.error('验证失败，请重新登录验证')
-      if (valid) {
-        this.showLogin = true
-        this.showSlide = false
-      } else {
-        console.log('error submit!!')
-        return false
-      }
+      this.showLogin = true;
+      this.showSlide = false;
+      this.$refs.slideblock.reset();
+      // if (valid) {
+      //
+      // } else {
+      //   console.log('error submit!!')
+      //   return false
+      // }
     },
       // 刷新验证条
     onRefresh() {
+      this.$refs.slideblock.reset();
     },
     handleLogin() {
       getIp().then(res => {
@@ -244,6 +250,7 @@ export default {
           this.$router.push({
             name: 'Welcome'
           })
+          console.log("ss0" + this.$store.state.tagsView.visitedViews);
         }).catch(() => {
           this.loading = false
         })

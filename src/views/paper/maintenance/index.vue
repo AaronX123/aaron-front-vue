@@ -216,6 +216,7 @@ import { queryCategory } from '@/api/basedata/category'
 import { queryDictionary } from '../../../api/basedata/dictionary'
 import { deletePaper, modifyPaper, paperDetail, queryPaperWithCondition } from '../../../api/paper/maintain'
 import PaperInfo from '@/components/paperInfo/index'
+import { MessageBox, Message } from 'element-ui'
 export default {
   name: 'Position',
   components: { PaperInfo },
@@ -398,7 +399,11 @@ export default {
       console.log(this.selected)
       if (e === 1) {
         if (this.selected.length < 1) {
-          alert('请选择一项进行删除')
+          Message({
+            message: '请选择一项进行删除',
+            type: 'error',
+            duration: 3 * 1000
+          })
         } else {
           this.$confirm('确认删除吗？', '提示', {}).then(() => {
               this.loading = true
@@ -407,12 +412,20 @@ export default {
                   ids.push(this.selected[i].id)
               }
               deletePaper(ids).then(res => {
-                  alert(res.data)
+                  Message({
+                    message: res,
+                    type: 'error',
+                    duration: 3 * 1000
+                  })
                   //清空选项，项目中：请求接口后，重新请求数据渲染页面的时候，使用此方式，清空选中勾选状态。
                   this.$refs.multipleTable.clearSelection();
                   this.initPaper()
               }).catch(e=>{
-                  alert(e)
+                  Message({
+                    message: e,
+                    type: 'error',
+                    duration: 3 * 1000
+                  })
                   //清空选项，项目中：请求接口后，重新请求数据渲染页面的时候，使用此方式，清空选中勾选状态。
                   this.$refs.multipleTable.clearSelection();
                   this.initPaper()
@@ -444,7 +457,11 @@ export default {
     handleModify(e) {
       if (e === 1) {
         if (this.selected.length !== 1) {
-          alert('必须且仅只能选择一条')
+          Message({
+            message: '必须且仅只能选择一条',
+            type: 'error',
+            duration: 3 * 1000
+          })
         } else {
           this.show = false
           this.showHeader = false
@@ -479,7 +496,11 @@ export default {
     handleInfo(e) {
       if (e === 1) {
         if (this.selected.length !== 1) {
-          alert('必须且仅只能选择一条')
+          Message({
+            message: '必须且仅选择一份试卷',
+            type: 'error',
+            duration: 3 * 1000
+          })
         } else {
           this.paperInfoLoading = true
           paperDetail(this.selected[0].id).then(res => {
@@ -529,16 +550,17 @@ export default {
     },
     handleSave() {
         if (this.currentPaperVO.name === ''){
-            alert("请输入试卷名称")
-            return
+          Message({
+            message: '请输入试卷名称',
+            type: 'error',
+            duration: 3 * 1000
+          })
         }
       // 将currentPaperVO发送给试卷服务
       modifyPaper(this.currentPaperVO).then(res=>{
-          alert(res)
           this.showEdit = false
           this.initPaper()
       }).catch(res=>{
-          alert(res)
           this.showEdit = false
           this.initPaper()
       })

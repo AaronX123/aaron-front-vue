@@ -4,6 +4,8 @@ import { saveHead } from '@/utils/requestUtils'
 import { getMenuTree, converter, getOptionPermission } from '@/utils/getMenuTree'
 import router, { resetRouter, errorRouter } from '@/router'
 // import Layout from '@/layout'
+import store from '@/store'
+
 
 const state = {
   token: getToken(),
@@ -89,13 +91,16 @@ const actions = {
           reject('验证失败，请重新登录')
         }
         const perms = getOptionPermission(menu)
-        commit('SET_PERMS', perms)
+        commit('SET_PREMS', perms)
         const newMenu = converter(menu)
         const MenuTree = getMenuTree(newMenu)
         MenuTree.push(errorRouter)
         resetRouter()
         router.options.routes = MenuTree
         router.addRoutes(MenuTree)
+        console.log(newMenu)
+        console.log(MenuTree);
+        console.log(router);
         resolve(menu)
       }).catch(error => {
         reject(error)

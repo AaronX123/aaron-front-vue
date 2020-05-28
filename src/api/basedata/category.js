@@ -21,7 +21,7 @@ export function queryCategory(data) {
 }
 
 export function getList(data) {
-  return basedataRequestApi('/category/getCategoryTree', 'post', data)
+  return basedataRequestApi('/category/getCategoryTree', 'get', data)
 }
 
 export function getUpdateForm(data) {

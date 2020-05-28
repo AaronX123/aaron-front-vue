@@ -7,14 +7,15 @@
           <br>
           <el-card>
             <h3>{{ currentPaperVO.name }}</h3>
-            <div v-for="(subject,index) in currentPaperVO.currentPaperSubjectDTOList" :key="index">
+            <div v-for="(subject,index) in currentPaperVO.currentPaperSubjectVOList" :key="index">
               <div>
                 <el-row>
                   <hr>
                   {{ index+1 }}.{{ subject.subject }}
                   <br>
                   <br>
-                  <div v-if="subject.subjectTypeId!=617015418787340288">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考生答案：{{ myAnswerVO[index].myAnswer }}</div>
+                  <!--<div v-if="subject.subjectTypeId!=617015418787340288">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考生答案：{{ myAnswerVO[index].myAnswer }}</div><!-->
+                  <div v-if="subject.subjectTypeName!=='编程题'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考生答案：{{ myAnswerVO[index].myAnswer }}</div>
                   <div v-else>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;考生答案：<img :src="myAnswerVO[index].myAnswer" alt="考生答案图片"></div>
                   <br>
                   <br>
@@ -68,6 +69,7 @@ export default {
     getThePaper() {
       getPaper(this.paperId).then(res => {
         this.currentPaperVO = res
+        console.log(this.currentPaperVO)
       })
     },
     getThePaperAnswer() {

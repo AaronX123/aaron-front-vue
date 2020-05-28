@@ -104,7 +104,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="saveFormSubmit('saveForm')">提交</el-button>
-        <el-button @click="saveFormVisible = false">取消</el-button>
+        <el-button @click="closeSaveTag">取消</el-button>
       </div>
     </el-dialog>
     <!-- 修改配置窗口 -->
@@ -245,11 +245,12 @@ export default {
     }
   },
   mounted() {
-  },
-  created() {
     this.getSubjectTypeOptions()
     this.getCategoryOptions()
     this.getDifficultyOptions()
+  },
+  created() {
+
   },
   methods: {
     // 多选方法
@@ -386,6 +387,7 @@ export default {
           const params = JSON.parse(JSON.stringify(this.saveForm))
           this.combExamConfigItemDataList.combExamConfigItemVOs.push(params)
           this.saveFormVisible = false
+          this.clearSaveForm()
           this.$message({
             message: '添加成功',
             type: 'success'
@@ -397,6 +399,21 @@ export default {
       })
     },
 
+    clearSaveForm(){
+      this.saveForm.subjectTypeId = ''
+      this.saveForm.subjectType = ''
+      this.saveForm.categoryId = ''
+      this.saveForm.category = ''
+      this.saveForm.difficulty = ''
+      this.saveForm.difficultyName = ''
+      this.saveForm.num = ''
+      this.saveForm.score = ''
+      this.saveForm.categorySelectOption = ''
+    },
+    closeSaveTag(){
+      saveFormVisible = false
+      this.clearSaveForm()
+    },
     closeSelectedTag() {
       this.$router.push({
         name: '组卷配置管理'

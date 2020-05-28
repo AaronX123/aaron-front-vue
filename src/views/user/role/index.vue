@@ -258,6 +258,7 @@ import tree from '@/components/Tree/index'
 import PermsButton from '@/components/PermsButton/index'
 import Pagination from '@/components/Pagination/index'
 import loading from '@/components/Loading/index'
+import store from '@/store'
 export default {
   name: 'Role',
   components: { tree, PermsButton, loading, Pagination },

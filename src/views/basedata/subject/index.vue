@@ -119,7 +119,7 @@
           >
             <el-input v-model="answer.value" />
             <el-checkbox v-model="answer.rightAnswer">是否正确答案</el-checkbox>&nbsp;&nbsp;&nbsp;
-            <perms-button perms="deleteSubject" type="primary" label="删除" @click="removeAnswer(answer)" />
+            <perms-button perms="deleteSubjectAnswer" type="primary" label="删除" @click="removeAnswer(answer)" />
           </el-form-item>
         </el-row>
         <el-row>
@@ -202,7 +202,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <perms-button perms="updateSubject" type="primary" label="提交" @click="editSubmit('editForm')" />
-        <el-button @click="editFormVisible = false">取消</el-button>
+        <el-button @click="cancelEdit()">取消</el-button>
       </div>
     </el-dialog>
     <!--导入窗口-->
@@ -650,7 +650,10 @@ export default {
         }
       })
     },
-
+    cancelEdit(){
+      this.editFormVisible = false
+      this.loading = false
+    },
     //  table序号
     indexMethod(index) {
       return index + 1

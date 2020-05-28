@@ -26,7 +26,7 @@
               @click="handleSubjectAdd()"
             />
           </div>
-          <div v-for="(answer,index) in subject.subjectAnswerVOList">
+          <div v-for="(answer,index) in subject.subjectAnswerVoList">
             <el-radio :disabled="true" value>{{answer.option}}:{{answer.answer}}</el-radio>
           </div>
         </div>
@@ -170,7 +170,8 @@
       <el-table
               v-loading="loading"
               :data="subjectList"
-              style="width: 100%; height: 300px"
+              style="width: 100%"
+              :height="tableHeight"
               :row-key="getRowKeys"
               @selection-change="handleSubjectSelectionChange"
       >
@@ -201,7 +202,7 @@ import { querySubjectType } from '@/api/basedata/subjectType'
 import { queryCategory } from '@/api/basedata/category'
 import { getQueryList } from '@/utils/treeList'
     export default {
-        name: 'PaparInfo',
+        name: 'PaperInfo',
         props: {
 
             currentPaper: {
@@ -243,30 +244,21 @@ import { getQueryList } from '@/utils/treeList'
                 removedDataId:[],
                 showAddSubject: false,
                 subject:[],
-                // subjectTypeDataSearch: {
-                //   id: ''
-                // },
-                // subjectTypeOptions: [],
-                // categoryDataSearch: {
-                //   id: ''
-                // },
-                // categoryOptions: [],
                 condition:{
                     currentPage: 1,
-                    pageSize: 10000,
+                    pageSize: 3,
                     name:'',
                     difficulty:'',
                     subjectTypeId:'',
                     categoryId:'',
-                    currentPage: 1,
-                    pageSize: 5,
                     total: 1
                 },
                 formLabelWidth:'40px',
                 subjectList:[],
                 selected:'',
                 loading: false,
-                deletedId:[]
+                deletedId:[],
+                tableHeight: '400px',
             }
         },
         watch: {
@@ -285,32 +277,10 @@ import { getQueryList } from '@/utils/treeList'
 
         },
         methods: {
-
-            // // 获取 题型 选项信息
-            // getSubjectTypeOptions() {
-            //   console.log(11)
-            //   querySubjectType(this.subjectTypeDataSearch).then(result => {
-            //     for (let i = 0; i < this.result.length; i++) {
-            //       this.subjectTypeOptions[i] = {}
-            //       this.subjectTypeOptions[i].label = this.result[i].name
-            //       this.subjectTypeOptions[i].value = this.result[i].id
-            //     }
-            //     this.loading = false
-            //   }).catch(() => {
-            //     this.loading = false
-            //   })
-            // },
-            // // 获取 题目类别 选项信息
-            // getCategoryOptions() {
-            //   queryCategory(this.categoryDataSearch).then(result => {
-            //     this.categoryOptions = getQueryList(this.result)
-            //     this.loading = false
-            //   }).catch(() => {
-            //     this.loading = false
-            //   })
-            // },
             handleSubjectDelete(e) {
                 this.deletedId.push(e)
+                console.log(this.deletedId)
+              console.log(this.currentPaperVO)
                 this.currentPaperVO.currentPaperSubjectVOList.forEach(function(item, index, arr) {
                     if (item.id === e) {
                         arr.splice(index, 1)
@@ -331,7 +301,12 @@ import { getQueryList } from '@/utils/treeList'
                     this.subjectList = res.pageInfo.list
                     this.condition.total = res.total
                     this.loading = false
+                    this.tableHeight = 300 + this.calcTableHeight(this.subjectList.length) + 'px';
                 }).catch(e=>{this.loading = false})
+            },
+
+            calcTableHeight(count){
+                return count * 30;
             },
             handleSubjectSelectionChange(selection){
                 this.selected = selection
@@ -345,8 +320,7 @@ import { getQueryList } from '@/utils/treeList'
                     let i = 0;
                     for (;i<this.selected.length;i++){
                         console.log(this.selected[i])
-                        let name = this.selected[i].name
-                        this.selected[i].subject = name
+                        this.selected[i].subject = this.selected[i].name
                         this.currentPaperVO.currentPaperSubjectVOList.push(this.selected[i]);
                     }
                 }

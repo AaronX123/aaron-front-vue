@@ -307,7 +307,9 @@ export default {
       this.loading = true
       getList(this.type).then(res => {
         this.parentData = res
+        console.log(this.parentData);
         this.setTree = getTreeList(this.parentData)
+        console.log(this.setTree);
         this.treeName = '组织机构'
         this.options = getParentOptions(this.parentData)
         this.loading = false

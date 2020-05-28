@@ -126,126 +126,110 @@
 </template>
 
 <script>
-import { save, del, update, getUpdateForm, query } from '@/api/user/userCommon.js'
-import { validatePhoneTwo } from '@/utils/validate'
-import PermsButton from '@/components/PermsButton/index'
-import Pagination from '@/components/Pagination/index'
-import loading from '@/components/Loading/index'
-export default {
-  name: 'Position',
-  components: { PermsButton, loading, Pagination },
-  data() {
-    return {
-      organizationData: [],
-      queryForm: {
-        name: '',
-        currentPage: 1,
-        pageSize: 10
-      },
-      show: true,
-      FormRules: {
-        name: [{ required: true, message: '请输入组织机构名', trigger: 'blur' }],
-        code: [{ required: true, message: '请输入机构代码', trigger: 'blur' }],
-        tel: [{ validator: validatePhoneTwo, trigger: 'blur' }],
-        status: [{ required: true, message: '请选择是否启用', trigger: 'blur' }]
-      },
-      saveForm: {
-        id: '',
-        name: '',
-        code: '',
-        master: '',
-        tel: '',
-        address: '',
-        status: 1
-      },
-      updateForm: {
-        id: '',
-        name: '',
-        code: '',
-        master: '',
-        tel: '',
-        address: '',
-        status: ''
-      },
-      loading: false,
-      total: 0,
-      pageSize: 10,
-      deleteForm: [],
-      type: 'Org',
-      multipleSelection: [],
-      // 表格select选中的条数
-      select_order_number: '',
-      // 表格select复选框选中的id
-      select_orderId: [],
-      saveDialogVisible: false,
-      deleteDialogVisible: false,
-      updateDialogVisible: false
-    }
-  },
-  mounted() {
-    this.getOrganization()
-  },
-  methods: {
-    getOrganization() {
-      this.loading = true
-      query(this.type, this.queryForm).then(res => {
-        this.organizationData = res.pageInfo.list
-        this.total = res.total
-        this.loading = false
-      })
-      this.loading = false
+  import { save, del, update, getUpdateForm, query } from '@/api/user/userCommon.js'
+  import { validatePhoneTwo } from '@/utils/validate'
+  import PermsButton from '@/components/PermsButton/index'
+  import Pagination from '@/components/Pagination/index'
+  import loading from '@/components/Loading/index'
+  export default {
+    name: 'Position',
+    components: { PermsButton, loading, Pagination },
+    data() {
+      return {
+        organizationData: [],
+        queryForm: {
+          name: '',
+          currentPage: 1,
+          pageSize: 10
+        },
+        show: true,
+        FormRules: {
+          name: [{ required: true, message: '请输入组织机构名', trigger: 'blur' }],
+          code: [{ required: true, message: '请输入机构代码', trigger: 'blur' }],
+          tel: [{ validator: validatePhoneTwo, trigger: 'blur' }],
+          status: [{ required: true, message: '请选择是否启用', trigger: 'blur' }]
+        },
+        saveForm: {
+          id: '',
+          name: '',
+          code: '',
+          master: '',
+          tel: '',
+          address: '',
+          status: 1
+        },
+        updateForm: {
+          id: '',
+          name: '',
+          code: '',
+          master: '',
+          tel: '',
+          address: '',
+          status: ''
+        },
+        loading: false,
+        total: 0,
+        pageSize: 10,
+        deleteForm: [],
+        type: 'Org',
+        multipleSelection: [],
+        // 表格select选中的条数
+        select_order_number: '',
+        // 表格select复选框选中的id
+        select_orderId: [],
+        saveDialogVisible: false,
+        deleteDialogVisible: false,
+        updateDialogVisible: false
+      }
     },
-    queryOrganization() {
-      this.loading = true
-      query(this.type, this.queryForm).then(res => {
-        this.organizationData = res.pageInfo.list
-        this.loading = false
-      })
-      this.loading = false
+    mounted() {
+      this.getOrganization()
     },
-    saveOrganization() {
-      this.saveDialogVisible = true
-    },
-    saveOrganizationData(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.loading = true
-          save(this.type, this.saveForm).then(res => {
-            this.saveDialogVisible = false
-            this.getOrganization()
-            this.loading = false
-            this.$nextTick(() => {
-              this.$refs['saveForm'].resetFields()
-            })
-            this.loading = false
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    delOrganization(row) {
-      this.deleteForm = []
-      this.deleteForm[0] = row
-      this.$confirm('确认删除吗？', '提示', {}).then(() => {
+    methods: {
+      getOrganization() {
         this.loading = true
-        del(this.type, this.deleteForm).then(res => {
-          this.getOrganization()
+        query(this.type, this.queryForm).then(res => {
+          this.organizationData = res.pageInfo.list
+          this.total = res.total
           this.loading = false
         })
         this.loading = false
-      })
-    },
-    delSelectOrganization(row) {
-      if (this.multipleSelection.length < 1) {
-        this.$message({
-          message: '最少选择一项删除',
-          type: 'faile'
+      },
+      queryOrganization() {
+        this.loading = true
+        query(this.type, this.queryForm).then(res => {
+          this.organizationData = '';
+          this.organizationData = res.pageInfo.list;
+          this.loading = false
         })
-      } else {
+        this.loading = false
+      },
+      saveOrganization() {
+        this.saveDialogVisible = true
+      },
+      saveOrganizationData(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.loading = true
+            save(this.type, this.saveForm).then(res => {
+              this.saveDialogVisible = false
+              this.getOrganization()
+              this.loading = false
+              this.$nextTick(() => {
+                this.$refs['saveForm'].resetFields()
+              })
+              this.loading = false
+            })
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
+      },
+      delOrganization(row) {
+        this.deleteForm = []
+        this.deleteForm[0] = row
         this.$confirm('确认删除吗？', '提示', {}).then(() => {
-          this.deleteForm = this.multipleSelection
           this.loading = true
           del(this.type, this.deleteForm).then(res => {
             this.getOrganization()
@@ -253,103 +237,120 @@ export default {
           })
           this.loading = false
         })
-      }
-    },
-    // 双击表格查看详情并修改功能
-    dblclick(row, column, event) {
-      this.updateOrganization(row)
-    },
-    updateOrganization(row) {
-      this.loading = true
-      getUpdateForm(this.type, row.id).then(res => {
-        this.updateDialogVisible = true
-        this.updateForm = res
-        this.loading = false
-      })
-      this.loading = false
-    },
-    updateSelectOrganization(row) {
-      if (this.multipleSelection.length > 1) {
-        this.$message({
-          message: '不可多条修改',
-          type: 'faile'
-        })
-      } else if (this.multipleSelection.length === 0) {
-        this.$message({
-          message: '请选中一条进行修改',
-          type: 'faile'
-        })
-      } else {
+      },
+      delSelectOrganization(row) {
+        if (this.multipleSelection.length < 1) {
+          this.$message({
+            message: '最少选择一项删除',
+            type: 'faile'
+          })
+        } else {
+          this.$confirm('确认删除吗？', '提示', {}).then(() => {
+            this.deleteForm = this.multipleSelection
+            this.loading = true
+            del(this.type, this.deleteForm).then(res => {
+              this.getOrganization()
+              this.loading = false
+            })
+            this.loading = false
+          })
+        }
+      },
+      // 双击表格查看详情并修改功能
+      dblclick(row, column, event) {
+        this.updateOrganization(row)
+      },
+      updateOrganization(row) {
         this.loading = true
-        getUpdateForm(this.type, this.multipleSelection[0].id).then(res => {
+        getUpdateForm(this.type, row.id).then(res => {
           this.updateDialogVisible = true
           this.updateForm = res
           this.loading = false
         })
         this.loading = false
-      }
-    },
-    updateOrganizationData(updateForm) {
-      this.$refs['updateForm'].validate((valid) => {
-        if (valid) {
+      },
+      updateSelectOrganization(row) {
+        if (this.multipleSelection.length > 1) {
+          this.$message({
+            message: '不可多条修改',
+            type: 'faile'
+          })
+        } else if (this.multipleSelection.length === 0) {
+          this.$message({
+            message: '请选中一条进行修改',
+            type: 'faile'
+          })
+        } else {
           this.loading = true
-          update(this.type, updateForm).then(res => {
-            this.updateDialogVisible = false
-            this.getOrganization()
+          getUpdateForm(this.type, this.multipleSelection[0].id).then(res => {
+            this.updateDialogVisible = true
+            this.updateForm = res
             this.loading = false
           })
           this.loading = false
-        } else {
-          console.log('error submit!!')
-          return false
         }
-      })
-    },
-    handleSelectionChange(rows) {
-      this.multipleSelection = rows
-      this.select_order_number = this.multipleSelection.length
-      this.select_orderId = []
-      if (rows) {
-        rows.forEach(row => {
-          if (row) {
-            this.select_orderId.push(row.id)
+      },
+      updateOrganizationData(updateForm) {
+        this.$refs['updateForm'].validate((valid) => {
+          if (valid) {
+            this.loading = true
+            update(this.type, updateForm).then(res => {
+              this.updateDialogVisible = false
+              this.getOrganization()
+              this.loading = false
+            })
+            this.loading = false
+          } else {
+            console.log('error submit!!')
+            return false
           }
         })
-      }
-    },
-    getRowKeys(row) {
-      return row.id
-    },
-    handleCurrentChange(currentPage) {
-      this.queryForm.currentPage = currentPage
-      this.loading = true
-      query(this.type, this.queryForm).then(res => {
-        this.organizationData = res.pageInfo.list
+      },
+      handleSelectionChange(rows) {
+        this.multipleSelection = rows
+        this.select_order_number = this.multipleSelection.length
+        this.select_orderId = []
+        if (rows) {
+          rows.forEach(row => {
+            if (row) {
+              this.select_orderId.push(row.id)
+            }
+          })
+        }
+      },
+      getRowKeys(row) {
+        return row.id
+      },
+      handleCurrentChange(currentPage) {
+        this.queryForm.currentPage = currentPage
+        this.loading = true
+        query(this.type, this.queryForm).then(res => {
+          this.organizationData = res.pageInfo.list
+          this.loading = false
+        })
         this.loading = false
-      })
-      this.loading = false
-    },
-    statusFormatter(row) {
-      return row.status === 1 ? '是' : '否'
+      },
+      statusFormatter(row) {
+        return row.status === 1 ? '是' : '否'
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
-.dashboard {
-  &-container {
-    margin: 10px;
+  .dashboard {
+    &-container {
+      margin: 10px;
+    }
+    &-text {
+      font-size: 20px;
+      line-height: 10px;
+    }
   }
-  &-text {
-    font-size: 20px;
-    line-height: 10px;
+  .span-ellipsis {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
-}
-.span-ellipsis {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
 </style>

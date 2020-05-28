@@ -28,5 +28,5 @@ export function query(type, data) {
 // 获取树数据的接口
 export function getList(type) {
   const data = {}
-  return userRequestApi('/' + type.toLowerCase() + '/get' + type + 'List', 'post', data)
+  return userRequestApi('/' + type.toLowerCase() + '/get' + type + 'List', 'get', data)
 }
